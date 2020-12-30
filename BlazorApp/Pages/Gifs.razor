@@ -1,0 +1,57 @@
+﻿@page "/gifs"
+@using BlazorApp.Data
+
+@inject GiphyClientService GiphyClientService
+<h3>Gifs</h3>
+
+
+@if (gifs == null)
+{
+    <h2> Loading... </h2>
+}
+else
+{
+    @if (gifs.Length > 0)
+    {
+        @foreach (var gif in gifs)
+        {
+            <iframe id="@gif.Id" src="@gif.Embed_url" alt="@gif.Title  @gif.Url" />
+        }
+    }
+    else
+    {
+        <h2> no gifs, try harder </h2>
+    }
+}
+
+
+<input placeholder="Search Keyword" @bind="Keyword" @bind:event="oninput" @onchange="InputHasChanged"/>
+
+<button type="button" @onclick="SearchGifs"> Search </button>
+
+@code {
+
+    private string Keyword { get; set; }
+
+    private GifItem[] gifs;
+
+    protected override async Task OnInitializedAsync()
+    {
+        gifs = await GiphyClientService.GetGifsAsync();
+    }
+
+    async private Task SearchGifs()
+    {
+        if (Keyword != null && Keyword.Length > 0)
+        {
+            gifs = await GiphyClientService.GetGifsAsync(Keyword);
+        }
+
+    }
+
+    private void InputHasChanged()
+    {
+        Console.WriteLine(Keyword);
+    }
+
+}
