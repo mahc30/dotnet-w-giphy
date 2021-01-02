@@ -9,27 +9,42 @@ namespace BlazorApp.Data
 {
     public class GiphyClientService
     {
-        private const int GIF_LIMIT = 9;
         private IHttpClientFactory _factory;
+        public enum GifType
+        {
+            Gif,
+            Sticker
+        }
         public GiphyClientService(IHttpClientFactory factory)
         {
             _factory = factory;
         }
 
-        public async Task<GifItem[]> GetGifsAsync()
+        public async Task<Datum[]> GetGifsAsync(GifType type)
         {
             var client = _factory.CreateClient("Giphy");
             
             GiphyResponse giphyRequest = null;
-            HttpResponseMessage  response = await client.GetAsync($"gifs/trending?api_key={Constants.GIPHY_API_KEY}&limit={Constants.GIPHY_MAX_ELEMENTS}");
+            HttpResponseMessage response;
+
+            if (type == GifType.Gif)
+            {
+            response = await client.GetAsync($"gifs/trending?api_key={Constants.GIPHY_API_KEY}&limit={Constants.GIPHY_MAX_ELEMENTS}");
+            }
+            else
+            {
+                response = await client.GetAsync($"stickers/trending?api_key={Constants.GIPHY_API_KEY}&limit={Constants.GIPHY_MAX_ELEMENTS}");
+            }
+
             if (response.IsSuccessStatusCode)
             {
                 giphyRequest = await response.Content.ReadAsAsync<GiphyResponse>();
             }
-            return await Task.FromResult(giphyRequest.data.Select(item => new GifItem(item.id, item.title, item.url, item.embed_url)).ToArray());
+
+            return giphyRequest?.data;
         }
 
-        async public Task<GifItem[]> GetGifsAsync(string keyword)
+        async public Task<Datum[]> GetGifsAsync(GifType type, string keyword)
         {
             var client = _factory.CreateClient("Giphy");
 
@@ -40,7 +55,8 @@ namespace BlazorApp.Data
             {
                 giphyRequest = await response.Content.ReadAsAsync<GiphyResponse>();
             }
-            return await Task.FromResult(giphyRequest.data.Select(item => new GifItem(item.id, item.title, item.url, item.embed_url)).ToArray());
+            return giphyRequest?.data;
         }
+
     }
 }

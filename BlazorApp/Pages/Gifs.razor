@@ -2,56 +2,80 @@
 @using BlazorApp.Data
 
 @inject GiphyClientService GiphyClientService
+@using BlazorApp.models
+
 <h3>Gifs</h3>
 
-
-@if (gifs == null)
-{
-    <h2> Loading... </h2>
-}
-else
-{
-    @if (gifs.Length > 0)
+<div id="GifsContainer">
+    @if (_giphy_content == null)
     {
-        @foreach (var gif in gifs)
-        {
-            <iframe id="@gif.Id" src="@gif.Embed_url" alt="@gif.Title  @gif.Url" />
-        }
+        <h2> Loading... </h2>
     }
     else
     {
-        <h2> no gifs, try harder </h2>
+        @if (_giphy_content.Length > 0)
+        {
+            @foreach (var gif in _giphy_content)
+            {
+                <iframe id="@gif.id" src="@gif.embed_url" alt="@gif.title  @gif.url" />
+            }
+        }
+        else
+        {
+            <h2> no gifs, try harder </h2>
+        }
     }
-}
+</div>
 
+<div id="searchbar">
+    <input placeholder="Search Keyword" @bind="Keyword" />
 
-<input placeholder="Search Keyword" @bind="Keyword" @bind:event="oninput" @onchange="InputHasChanged"/>
+    <select id="select-box" bind="@_gifType" @onchange="ReloadContent">
+        <option value="@GiphyClientService.GifType.Gif">Gif</option>
+        <option value="@GiphyClientService.GifType.Sticker">Sticker</option>
+    </select>
 
-<button type="button" @onclick="SearchGifs"> Search </button>
+    <button type="button" @onclick="Search"> Search </button>
+</div>
 
 @code {
 
     private string Keyword { get; set; }
+    private GiphyClientService.GifType _gifType = GiphyClientService.GifType.Gif;
 
-    private GifItem[] gifs;
+    private Datum[] _giphy_content;
 
     protected override async Task OnInitializedAsync()
     {
-        gifs = await GiphyClientService.GetGifsAsync();
+        _giphy_content = await GiphyClientService.GetGifsAsync(GiphyClientService.GifType.Gif);
     }
 
-    async private Task SearchGifs()
+    private async Task ReloadContent(ChangeEventArgs e)
     {
-        if (Keyword != null && Keyword.Length > 0)
+
+        if (e != null)
         {
-            gifs = await GiphyClientService.GetGifsAsync(Keyword);
-        }
+            if (e.Value != null)
+            {
+                GiphyClientService.GifType.TryParse((string)e.Value, out _gifType);
 
+            }
+        }
+      
+        await Search();
+        Keyword = string.Empty;
     }
 
-    private void InputHasChanged()
+    private async Task Search()
     {
-        Console.WriteLine(Keyword);
+        if (Keyword == null || Keyword.Length <= 0)
+        {
+            _giphy_content = await GiphyClientService.GetGifsAsync(_gifType);
+        }
+        else
+        {
+            _giphy_content = await GiphyClientService.GetGifsAsync(_gifType, Keyword);
+        }
     }
 
 }

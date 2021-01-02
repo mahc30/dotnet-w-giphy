@@ -82,6 +82,13 @@ using BlazorApp.Data;
 #line default
 #line hidden
 #nullable disable
+#nullable restore
+#line 5 "D:\DasSache\BlazorProject\BlazorApp\Pages\Gifs.razor"
+using BlazorApp.models;
+
+#line default
+#line hidden
+#nullable disable
     [Microsoft.AspNetCore.Components.RouteAttribute("/gifs")]
     public partial class Gifs : Microsoft.AspNetCore.Components.ComponentBase
     {
@@ -91,30 +98,45 @@ using BlazorApp.Data;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 32 "D:\DasSache\BlazorProject\BlazorApp\Pages\Gifs.razor"
+#line 41 "D:\DasSache\BlazorProject\BlazorApp\Pages\Gifs.razor"
        
 
     private string Keyword { get; set; }
+    private GiphyClientService.GifType _gifType = GiphyClientService.GifType.Gif;
 
-    private GifItem[] gifs;
+    private Datum[] _giphy_content;
 
     protected override async Task OnInitializedAsync()
     {
-        gifs = await GiphyClientService.GetGifsAsync();
+        _giphy_content = await GiphyClientService.GetGifsAsync(GiphyClientService.GifType.Gif);
     }
 
-    async private Task SearchGifs()
+    private async Task ReloadContent(ChangeEventArgs e)
     {
-        if (Keyword != null && Keyword.Length > 0)
+
+        if (e != null)
         {
-            gifs = await GiphyClientService.GetGifsAsync(Keyword);
-        }
+            if (e.Value != null)
+            {
+                GiphyClientService.GifType.TryParse((string)e.Value, out _gifType);
 
+            }
+        }
+      
+        await Search();
+        Keyword = string.Empty;
     }
 
-    private void InputHasChanged()
+    private async Task Search()
     {
-        Console.WriteLine(Keyword);
+        if (Keyword == null || Keyword.Length <= 0)
+        {
+            _giphy_content = await GiphyClientService.GetGifsAsync(_gifType);
+        }
+        else
+        {
+            _giphy_content = await GiphyClientService.GetGifsAsync(_gifType, Keyword);
+        }
     }
 
 
