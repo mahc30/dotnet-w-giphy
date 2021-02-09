@@ -1,0 +1,68 @@
+﻿@page "/"
+@using DetectorVirus.Data
+
+<div id="FileForm">
+    <h2> Ruta del Archivo: </h2>
+    <input type="text" @bind-value="@FilePath" />
+    <strong id="error_message" style=@error_message_style>@error_message</strong>
+</div>
+
+<div id="Info">
+    <h6>Secuencia encontrada: </h6>
+    <p> Bytes: @Byte_sequence</p>
+</div>
+
+<div id="Results">
+    <h6> Encontrado </h6>
+    @if (viruses != null)
+    {
+        @foreach (var virus in viruses)
+        {
+            <ul>
+                <li>
+                    @virus.getName()
+                </li>
+            </ul>
+
+        }
+    }
+</div>
+
+<button @onclick="analyze"> <strong> Analizar</strong></button>
+
+
+@code {
+    private string FilePath { get; set; }
+    private string error_message_style { get; set; } = "color: green;";
+    private string error_message { get; set; } = "";
+    private string Byte_sequence { get; set; }
+    private Virus[] viruses;
+
+    private async void analyze()
+    {
+        viruses = null;
+        Byte_sequence = string.Empty;
+        error_message = string.Empty;
+        error_message_style = "color: green;";
+
+        if (FilePath != null && FilePath.Length > 0)
+        {
+            Analyzer analyzer = new Analyzer();
+
+            try
+            {
+                analyzer.loadVirus(FilePath);
+                error_message = "Analizando :)";
+                Byte_sequence = analyzer.GetVirus().ToReadableByteArray();
+                viruses = await analyzer.analyze();
+            }
+            catch (Exception)
+            {
+                error_message_style = "color: red;";
+                error_message = "No se pudo encontrar el archivo";
+            }
+        }
+    }
+}
+
+
