@@ -1,18 +1,16 @@
 ﻿using System;
 using System.IO;
 
-/// <summary>
-/// Summary description for Class1
-/// </summary>
+// Miguel Ángel Hincapié Calle - 000148441
+// 18/02/2021
+
+// Clase para manejo de archivos
+// No necesita constructor porque para este caso solo cuenta con un método estático
 public class FileReader
 {
-	public FileReader()
-	{
-		//
-		// TODO: Add constructor logic here
-		// No need )?
-	}
 
+	// Lee un archivo local como un arreglo de bytes
+	// Retorna un array de bytes
 	public static byte[] readFile(string path) {
 		
 		byte[] file_bytes;

@@ -2,6 +2,8 @@
 @using DetectorVirus.Data
 
 <div id="FileForm">
+    <h2> Cómo usar: </h2>
+    <span> Escribir el nombre del archivo que se encuentra en la carpeta del proyecto (DetectorVirus) y dar click al botón Analizar"</span>
     <h2> Ruta del Archivo: </h2>
     <input type="text" @bind-value="@FilePath" />
     <strong id="error_message" style=@error_message_style>@error_message</strong>
@@ -13,9 +15,10 @@
 </div>
 
 <div id="Results">
-    <h6> Encontrado </h6>
-    @if (viruses != null)
+    @if (viruses != null && viruses.Length > 0)
     {
+        <h6> Estado del Automata: q9 </h6>
+        <h6> Virus Encontrados: </h6>
         @foreach (var virus in viruses)
         {
             <ul>
@@ -25,6 +28,11 @@
             </ul>
 
         }
+    }
+    else
+    {
+        <h6> No se han detectado Virus </h6>
+        <h6> Estado del Automata: q0 </h6>
     }
 </div>
 
@@ -38,26 +46,33 @@
     private string Byte_sequence { get; set; }
     private Virus[] viruses;
 
+    // Función ejecutada cuando se detecta un evento de click en el botón "Analizar"
     private async void analyze()
     {
+        // Reestablecer valores por defecto de la interfaz gráfica
         viruses = null;
         Byte_sequence = string.Empty;
         error_message = string.Empty;
         error_message_style = "color: green;";
 
+        // Comprobar que la ruta de archivo indicada por el usuario no sea nulo o un string vacío
         if (FilePath != null && FilePath.Length > 0)
         {
             Analyzer analyzer = new Analyzer();
-
             try
             {
-                analyzer.loadVirus(FilePath);
+                analyzer.loadVirus(FilePath); // Indicarle al servidor que busque y lea un archivo local con el nombre indicado
+                
+                //Manipular Interfaz Gráfica...
                 error_message = "Analizando :)";
                 Byte_sequence = analyzer.GetVirus().ToReadableByteArray();
+
+                // Indicarle al analizador que analize el archivo
                 viruses = await analyzer.analyze();
             }
             catch (Exception)
             {
+                //Manipular Interfaz Gráfica...
                 error_message_style = "color: red;";
                 error_message = "No se pudo encontrar el archivo";
             }

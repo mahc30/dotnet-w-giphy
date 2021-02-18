@@ -12,35 +12,35 @@
   "ProjectWorkspaceState": {
     "TagHelpers": [
       {
-        "HashCode": 111003046,
+        "HashCode": -1971134577,
         "Kind": "Components.Component",
-        "Name": "BlazorApp.App",
+        "Name": "BlazorApp.Pages.Gifs",
         "AssemblyName": "BlazorApp",
         "CaseSensitive": true,
         "TagMatchingRules": [
           {
-            "TagName": "App"
+            "TagName": "Gifs"
           }
         ],
         "Metadata": {
           "Runtime.Name": "Components.IComponent",
-          "Common.TypeName": "BlazorApp.App"
+          "Common.TypeName": "BlazorApp.Pages.Gifs"
         }
       },
       {
-        "HashCode": -886182217,
+        "HashCode": -1415836391,
         "Kind": "Components.Component",
-        "Name": "BlazorApp.App",
+        "Name": "BlazorApp.Pages.Gifs",
         "AssemblyName": "BlazorApp",
         "CaseSensitive": true,
         "TagMatchingRules": [
           {
-            "TagName": "BlazorApp.App"
+            "TagName": "BlazorApp.Pages.Gifs"
           }
         ],
         "Metadata": {
           "Runtime.Name": "Components.IComponent",
-          "Common.TypeName": "BlazorApp.App",
+          "Common.TypeName": "BlazorApp.Pages.Gifs",
           "Components.NameMatch": "Components.FullyQualifiedNameMatch"
         }
       },
@@ -193,6 +193,39 @@
         "Metadata": {
           "Runtime.Name": "Components.IComponent",
           "Common.TypeName": "BlazorApp.Pages.Index",
+          "Components.NameMatch": "Components.FullyQualifiedNameMatch"
+        }
+      },
+      {
+        "HashCode": 111003046,
+        "Kind": "Components.Component",
+        "Name": "BlazorApp.App",
+        "AssemblyName": "BlazorApp",
+        "CaseSensitive": true,
+        "TagMatchingRules": [
+          {
+            "TagName": "App"
+          }
+        ],
+        "Metadata": {
+          "Runtime.Name": "Components.IComponent",
+          "Common.TypeName": "BlazorApp.App"
+        }
+      },
+      {
+        "HashCode": -886182217,
+        "Kind": "Components.Component",
+        "Name": "BlazorApp.App",
+        "AssemblyName": "BlazorApp",
+        "CaseSensitive": true,
+        "TagMatchingRules": [
+          {
+            "TagName": "BlazorApp.App"
+          }
+        ],
+        "Metadata": {
+          "Runtime.Name": "Components.IComponent",
+          "Common.TypeName": "BlazorApp.App",
           "Components.NameMatch": "Components.FullyQualifiedNameMatch"
         }
       },
