@@ -7,34 +7,37 @@ using System.Text;
 // Un objeto Virus tiene dos campos 
 // Name, un string para identificarlo ("Ébola", "Covid19"...)
 // Sequence, un arreglo de bytes que es propio de ese virus
-public class Virus
+namespace DetectorVirus.Data
 {
-	private string Name { get; set; }
-    private byte[] Sequence { get; }
-
-    // Getter del nombre del virus
-    public string getName()
+    public class Virus
     {
-        return Name;
-    }
+        private string Name { get; set; }
+        private byte[] Sequence { get; }
 
-    // Getter de la secuencia del virus
-    public byte[] getSequence()
-    {
-        return Sequence;
-    }
+        // Getter del nombre del virus
+        public string getName()
+        {
+            return Name;
+        }
 
-    // Constructor
-    public Virus(string _name, byte[] _sequence)
-    {
-			Name = _name;
-			Sequence = _sequence;
-    }
+        // Getter de la secuencia del virus
+        public byte[] getSequence()
+        {
+            return Sequence;
+        }
 
-    // Convierte los bytes a un string legible para humanos
-    // Por ejemplo: 0x45 = 'E'
-    public string SequenceToString()
-    {
-        return Encoding.Default.GetString(Sequence);
+        // Constructor
+        public Virus(string _name, byte[] _sequence)
+        {
+            Name = _name;
+            Sequence = _sequence;
+        }
+
+        // Convierte los bytes a un string legible para humanos
+        // Por ejemplo: 0x45 = 'E'
+        public string SequenceToString()
+        {
+            return Encoding.Default.GetString(Sequence);
+        }
     }
 }
