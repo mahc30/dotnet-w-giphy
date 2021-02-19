@@ -39,5 +39,10 @@ namespace DetectorVirus.Data
         {
             return Encoding.Default.GetString(Sequence);
         }
+
+        public string ToReadableByteArray()
+        {
+            return string.Join(", ", Sequence);
+        }
     }
 }

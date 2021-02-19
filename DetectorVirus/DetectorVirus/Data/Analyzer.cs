@@ -34,7 +34,7 @@ namespace DetectorVirus.Data
 
         public Virus GetVirus()
         {
-            return Virus_DB[0];
+            return Possible_Virus;
         }
 
         //Inicializa el Campo Virus con la secuencia de bytes obtenida del archivo cargado

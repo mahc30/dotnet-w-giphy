@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "FJFd4/6ypzexyl11wqia0raKN+EoUqcZAGv8TXKEuCrhZ6K2HH2XebBX9e6FbfTbgV/2QNSxg5wI9oA07xQDJA==",
+  "dgSpecHash": "AW9onR1ljMGsL8bBS5k0nK50vUrW0DKHY44bE2kRWcNvQ7LXKwlEic7IkFT2+Smj2ZzJhoNp+R0hx5DTcVZTlw==",
   "success": true,
-  "projectFilePath": "D:\\Uni\\Teoria de la Computacion\\DetectorVirus\\DetectorVirus\\DetectorVirus.csproj",
+  "projectFilePath": "D:\\DasSache\\BlazorProject\\DetectorVirus\\DetectorVirus\\DetectorVirus.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }

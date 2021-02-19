@@ -13,11 +13,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Uni\\Teoria de la Computacion\\DetectorVirus\\DetectorVirus\\DetectorVirus.csproj",
+      "projectUniqueName": "D:\\DasSache\\BlazorProject\\DetectorVirus\\DetectorVirus\\DetectorVirus.csproj",
       "projectName": "DetectorVirus",
-      "projectPath": "D:\\Uni\\Teoria de la Computacion\\DetectorVirus\\DetectorVirus\\DetectorVirus.csproj",
+      "projectPath": "D:\\DasSache\\BlazorProject\\DetectorVirus\\DetectorVirus\\DetectorVirus.csproj",
       "packagesPath": "C:\\Users\\Miguel\\.nuget\\packages\\",
-      "outputPath": "D:\\Uni\\Teoria de la Computacion\\DetectorVirus\\DetectorVirus\\obj\\",
+      "outputPath": "D:\\DasSache\\BlazorProject\\DetectorVirus\\DetectorVirus\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Miguel\\AppData\\Roaming\\NuGet\\NuGet.Config",

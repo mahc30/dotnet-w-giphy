@@ -3,23 +3,32 @@
 @using System.IO
 
 <div id="FileForm">
-    <h2> Cómo usar: </h2>
-    <span> Escribir el nombre del archivo que se encuentra en la carpeta del proyecto (DetectorVirus) y dar click al botón Analizar"</span>
-    <h2> Ruta del Archivo: </h2>
+    <h4> Subir Archivo: </h4>
     <InputFile OnChange="@OnInputFileChange" multiple />
     <strong id="error_message" style=@error_message_style>@error_message</strong>
 </div>
+<br />
 
-<div id="Info">
-    <h6>Secuencia encontrada: </h6>
-    <p> Bytes: @Byte_sequence</p>
+<h4> Información del archivo subido: </h4>
+<div id="Info" style="max-height: 25rem; overflow-y: scroll;">
+    <strong>Secuencia encontrada: </strong>
+    <br />
+    <br />
+    <strong> Bytes:</strong>
+    <p>@Byte_sequence</p>
+    <br />
+    <br />
+    <strong> Bytes to String:</strong>
+    <p> @Readable_byte_sequence</p>
 </div>
+<br />
 
+<h4> Resultados del Análisis: </h4>
 <div id="Results">
     @if (viruses != null && viruses.Length > 0)
     {
-        <h6> Estado del Automata: q9 </h6>
-        <h6> Virus Encontrados: </h6>
+        <h6> Estado final del Automata: q9 </h6>
+        <strong> Virus Encontrados: </strong>
         @foreach (var virus in viruses)
         {
             <ul>
@@ -32,8 +41,8 @@
     }
     else
     {
-        <h6> No se han detectado Virus </h6>
-        <h6> Estado del Automata: q0 </h6>
+        <h6> Estado final del Automata: q0 </h6>
+        <strong> No se han detectado Virus </strong>
     }
 </div>
 
@@ -46,6 +55,7 @@
     private string error_message_style { get; set; } = "color: green;";
     private string error_message { get; set; } = "";
     private string Byte_sequence { get; set; }
+    private string Readable_byte_sequence { get; set; }
     private Virus[] viruses;
 
     // Función ejecutada cuando se detecta un evento de click en el botón "Analizar"
@@ -66,16 +76,17 @@
                 if (BrowserFile.Size > 0)
                 {
                     var stream = BrowserFile.OpenReadStream();
-                    var fileStream = File.Create(FilePath  = Path.GetTempPath() + Guid.NewGuid());
+                    var fileStream = File.Create(FilePath = Path.GetTempPath() + Guid.NewGuid());
                     await stream.CopyToAsync(fileStream);
                     stream.Close();
                     fileStream.Close();
                 }
-                    analyzer.loadVirus(FilePath); // Indicarle al servidor que busque y lea un archivo local con el nombre indicado
-                
+                analyzer.loadVirus(FilePath); // Indicarle al servidor que busque y lea un archivo local con el nombre indicado
+
                 //Manipular Interfaz Gráfica...
                 error_message = "Analizando :)";
                 Byte_sequence = analyzer.GetVirus().SequenceToString();
+                Readable_byte_sequence = analyzer.GetVirus().ToReadableByteArray();
 
                 // Indicarle al analizador que analize el archivo
                 viruses = await analyzer.Analyze();
@@ -85,6 +96,8 @@
                 //Manipular Interfaz Gráfica...
                 error_message_style = "color: red;";
                 error_message = "No se pudo encontrar el archivo";
+                Byte_sequence = string.Empty;
+                Readable_byte_sequence = string.Empty;
             }
         }
     }
