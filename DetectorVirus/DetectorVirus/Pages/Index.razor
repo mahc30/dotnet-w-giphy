@@ -1,11 +1,12 @@
 ﻿@page "/"
 @using DetectorVirus.Data
+@using System.IO
 
 <div id="FileForm">
     <h2> Cómo usar: </h2>
     <span> Escribir el nombre del archivo que se encuentra en la carpeta del proyecto (DetectorVirus) y dar click al botón Analizar"</span>
     <h2> Ruta del Archivo: </h2>
-    <input type="text" @bind-value="@FilePath" />
+    <InputFile OnChange="@OnInputFileChange" multiple />
     <strong id="error_message" style=@error_message_style>@error_message</strong>
 </div>
 
@@ -41,13 +42,14 @@
 
 @code {
     private string FilePath { get; set; }
+    private IBrowserFile BrowserFile { get; set; }
     private string error_message_style { get; set; } = "color: green;";
     private string error_message { get; set; } = "";
     private string Byte_sequence { get; set; }
     private Virus[] viruses;
 
     // Función ejecutada cuando se detecta un evento de click en el botón "Analizar"
-    private async void analyze()
+    private async Task analyze()
     {
         // Reestablecer valores por defecto de la interfaz gráfica
         viruses = null;
@@ -56,19 +58,27 @@
         error_message_style = "color: green;";
 
         // Comprobar que la ruta de archivo indicada por el usuario no sea nulo o un string vacío
-        if (FilePath != null && FilePath.Length > 0)
+        if (!string.IsNullOrEmpty(FilePath) || BrowserFile.Size > 0)
         {
             Analyzer analyzer = new Analyzer();
             try
             {
-                analyzer.loadVirus(FilePath); // Indicarle al servidor que busque y lea un archivo local con el nombre indicado
+                if (BrowserFile.Size > 0)
+                {
+                    var stream = BrowserFile.OpenReadStream();
+                    var fileStream = File.Create(FilePath  = Path.GetTempPath() + Guid.NewGuid());
+                    await stream.CopyToAsync(fileStream);
+                    stream.Close();
+                    fileStream.Close();
+                }
+                    analyzer.loadVirus(FilePath); // Indicarle al servidor que busque y lea un archivo local con el nombre indicado
                 
                 //Manipular Interfaz Gráfica...
                 error_message = "Analizando :)";
-                Byte_sequence = analyzer.GetVirus().ToReadableByteArray();
+                Byte_sequence = analyzer.GetVirus().SequenceToString();
 
                 // Indicarle al analizador que analize el archivo
-                viruses = await analyzer.analyze();
+                viruses = await analyzer.Analyze();
             }
             catch (Exception)
             {
@@ -78,6 +88,13 @@
             }
         }
     }
+
+    private void OnInputFileChange(InputFileChangeEventArgs obj)
+    {
+        BrowserFile = obj.File;
+        BrowserFile.RequestImageFileAsync("multipart/form-data", 500, 500);
+    }
+
 }
 
 
